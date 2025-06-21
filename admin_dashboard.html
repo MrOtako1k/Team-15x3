@@ -1,0 +1,1451 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TEST Team 15x3 - لوحة تحكم الأدمين</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            min-height: 100vh;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #00ffff, #0080ff);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #000;
+        }
+
+        .logo-text h1 {
+            font-size: 28px;
+            background: linear-gradient(135deg, #00ffff, #0080ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
+        }
+
+        .logo-text p {
+            color: #888;
+            font-size: 14px;
+        }
+
+        .system-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(0, 255, 0, 0.1);
+            padding: 10px 20px;
+            border-radius: 25px;
+            border: 1px solid rgba(0, 255, 0, 0.3);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #00ff00;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Navigation */
+        .nav-tabs {
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0;
+        }
+
+        .nav-container {
+            display: flex;
+            gap: 0;
+        }
+
+        .nav-tab {
+            background: none;
+            border: none;
+            color: #888;
+            padding: 20px 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .nav-tab:hover {
+            color: #00ffff;
+            background: rgba(0, 255, 255, 0.05);
+        }
+
+        .nav-tab.active {
+            color: #00ffff;
+            border-bottom-color: #00ffff;
+            background: rgba(0, 255, 255, 0.1);
+        }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 30px 0;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Cards */
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 255, 255, 0.1);
+            border-color: rgba(0, 255, 255, 0.3);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #00ffff, #0080ff);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-weight: bold;
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(0, 128, 255, 0.1));
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px rgba(0, 255, 255, 0.2);
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: bold;
+            color: #00ffff;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .stat-label {
+            color: #ccc;
+            font-size: 14px;
+        }
+
+        /* Users Table */
+        .users-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .users-table th,
+        .users-table td {
+            padding: 15px;
+            text-align: right;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .users-table th {
+            background: rgba(0, 255, 255, 0.1);
+            color: #00ffff;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+
+        .users-table tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00ffff, #0080ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-online { background: rgba(0, 255, 0, 0.2); color: #00ff00; }
+        .status-offline { background: rgba(255, 0, 0, 0.2); color: #ff4444; }
+        .status-busy { background: rgba(255, 165, 0, 0.2); color: #ffa500; }
+
+        .role-badge {
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .role-admin { background: rgba(255, 0, 0, 0.2); color: #ff4444; }
+        .role-tester { background: rgba(0, 0, 255, 0.2); color: #4488ff; }
+        .role-developer { background: rgba(0, 255, 0, 0.2); color: #44ff44; }
+        .role-visitor { background: rgba(255, 165, 0, 0.2); color: #ffa500; }
+
+        /* Chat */
+        .chat-container {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 25px;
+            height: 500px;
+        }
+
+        .chat-messages {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .chat-message {
+            margin-bottom: 15px;
+            padding: 12px 16px;
+            border-radius: 15px;
+            max-width: 80%;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message-admin {
+            background: linear-gradient(135deg, #0080ff, #00ffff);
+            color: #000;
+            margin-left: auto;
+            text-align: right;
+        }
+
+        .message-user {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            margin-right: auto;
+        }
+
+        .message-system {
+            background: rgba(255, 165, 0, 0.2);
+            color: #ffa500;
+            text-align: center;
+            margin: 10px auto;
+            max-width: 100%;
+            font-style: italic;
+        }
+
+        .message-header {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            opacity: 0.8;
+        }
+
+        .message-time {
+            font-size: 10px;
+            opacity: 0.6;
+            margin-top: 5px;
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .chat-input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            padding: 12px 20px;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: #00ffff;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        }
+
+        .chat-send-btn {
+            background: linear-gradient(135deg, #00ffff, #0080ff);
+            border: none;
+            border-radius: 25px;
+            padding: 12px 20px;
+            color: #000;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .chat-send-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 255, 255, 0.4);
+        }
+
+        .online-users {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .online-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .online-user:hover {
+            background: rgba(0, 255, 255, 0.1);
+            transform: translateX(-5px);
+        }
+
+        .online-dot {
+            width: 8px;
+            height: 8px;
+            background: #00ff00;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        /* Logs */
+        .log-entry {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            border-left: 4px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .log-entry:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateX(-5px);
+        }
+
+        .log-success { border-left-color: #00ff00; }
+        .log-warning { border-left-color: #ffa500; }
+        .log-error { border-left-color: #ff4444; }
+        .log-info { border-left-color: #00ffff; }
+
+        .log-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .log-success .log-icon { background: rgba(0, 255, 0, 0.2); color: #00ff00; }
+        .log-warning .log-icon { background: rgba(255, 165, 0, 0.2); color: #ffa500; }
+        .log-error .log-icon { background: rgba(255, 68, 68, 0.2); color: #ff4444; }
+        .log-info .log-icon { background: rgba(0, 255, 255, 0.2); color: #00ffff; }
+
+        .log-content {
+            flex: 1;
+        }
+
+        .log-message {
+            color: #fff;
+            margin-bottom: 5px;
+        }
+
+        .log-meta {
+            font-size: 12px;
+            color: #888;
+        }
+
+        /* Security Panel */
+        .security-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .security-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .security-item:hover {
+            background: rgba(0, 255, 255, 0.1);
+            border-color: rgba(0, 255, 255, 0.3);
+        }
+
+        .security-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .security-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .security-active .security-icon {
+            background: linear-gradient(135deg, #00ff00, #00cc00);
+            color: #000;
+        }
+
+        .security-inactive .security-icon {
+            background: linear-gradient(135deg, #ff4444, #cc0000);
+            color: #fff;
+        }
+
+        .security-status {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: rgba(0, 255, 0, 0.2);
+            color: #00ff00;
+        }
+
+        .status-inactive {
+            background: rgba(255, 68, 68, 0.2);
+            color: #ff4444;
+        }
+
+        /* Hacker Tools */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .tool-card {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 255, 255, 0.2);
+            border-color: rgba(0, 255, 255, 0.6);
+        }
+
+        .tool-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #00ffff, #0080ff);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 24px;
+            color: #000;
+        }
+
+        .tool-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .tool-status {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 15px;
+        }
+
+        .tool-btn {
+            background: linear-gradient(135deg, #00ffff, #0080ff);
+            border: none;
+            border-radius: 25px;
+            padding: 10px 20px;
+            color: #000;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .tool-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 255, 255, 0.4);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-container {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .nav-tab {
+                padding: 15px 20px;
+                font-size: 14px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 15px;
+            }
+
+            .chat-container {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+
+            .users-table {
+                font-size: 12px;
+            }
+
+            .users-table th,
+            .users-table td {
+                padding: 10px 8px;
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #00ffff, #0080ff);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #0080ff, #00ffff);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">T15</div>
+                    <div class="logo-text">
+                        <h1>TEST Team 15x3</h1>
+                        <p>لوحة تحكم الأدمين المتقدمة</p>
+                    </div>
+                </div>
+                <div class="system-status">
+                    <div class="status-dot"></div>
+                    <span>النظام يعمل بكفاءة 98%</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="nav-tabs">
+        <div class="container">
+            <div class="nav-container">
+                <button class="nav-tab active" onclick="showTab('overview')">
+                    <span class="nav-icon">📊</span>
+                    نظرة عامة
+                </button>
+                <button class="nav-tab" onclick="showTab('users')">
+                    <span class="nav-icon">👥</span>
+                    المستخدمين
+                </button>
+                <button class="nav-tab" onclick="showTab('chat')">
+                    <span class="nav-icon">💬</span>
+                    الدردشة
+                </button>
+                <button class="nav-tab" onclick="showTab('logs')">
+                    <span class="nav-icon">📋</span>
+                    سجل النظام
+                </button>
+                <button class="nav-tab" onclick="showTab('security')">
+                    <span class="nav-icon">🔒</span>
+                    الأمان
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Overview Tab -->
+            <div id="overview" class="tab-content active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-number" id="totalUsers">15</span>
+                        <div class="stat-label">إجمالي المستخدمين</div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" id="onlineUsers">8</span>
+                        <div class="stat-label">متصل الآن</div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" id="visitors">5</span>
+                        <div class="stat-label">الزوار</div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" id="activeChats">3</span>
+                        <div class="stat-label">المحادثات النشطة</div>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px;">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon">📈</div>
+                            <h3 class="card-title">النشاط المباشر</h3>
+                        </div>
+                        <div id="realtimeActivity">
+                            <div class="log-entry log-success">
+                                <div class="log-icon">✓</div>
+                                <div class="log-content">
+                                    <div class="log-message">تم تسجيل دخول مستخدم جديد</div>
+                                    <div class="log-meta">منذ دقيقتين • يوسف خالد</div>
+                                </div>
+                            </div>
+                            <div class="log-entry log-info">
+                                <div class="log-icon">ℹ</div>
+                                <div class="log-content">
+                                    <div class="log-message">تحديث إعدادات النظام</div>
+                                    <div class="log-meta">منذ 5 دقائق • أحمد محمد</div>
+                                </div>
+                            </div>
+                            <div class="log-entry log-warning">
+                                <div class="log-icon">⚠</div>
+                                <div class="log-content">
+                                    <div class="log-message">محاولة دخول مشبوهة</div>
+                                    <div class="log-meta">منذ 10 دقائق • IP: 45.67.89.123</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon">🌐</div>
+                            <h3 class="card-title">المستخدمين المتصلين</h3>
+                        </div>
+                        <div id="onlineUsersList">
+                            <div class="online-user">
+                                <div class="online-dot"></div>
+                                <div class="user-avatar">أ</div>
+                                <div>
+                                    <div style="font-weight: 600;">أحمد محمد</div>
+                                    <div style="font-size: 12px; color: #888;">الرياض • Chrome</div>
+                                </div>
+                                <div class="role-badge role-admin">أدمين</div>
+                            </div>
+                            <div class="online-user">
+                                <div class="online-dot"></div>
+                                <div class="user-avatar">س</div>
+                                <div>
+                                    <div style="font-weight: 600;">سارة أحمد</div>
+                                    <div style="font-size: 12px; color: #888;">جدة • Firefox</div>
+                                </div>
+                                <div class="role-badge role-admin">أدمين</div>
+                            </div>
+                            <div class="online-user">
+                                <div class="online-dot"></div>
+                                <div class="user-avatar">ي</div>
+                                <div>
+                                    <div style="font-weight: 600;">يوسف خالد</div>
+                                    <div style="font-size: 12px; color: #888;">القاهرة • Chrome</div>
+                                </div>
+                                <div class="role-badge role-visitor">زائر</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Users Tab -->
+            <div id="users" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">👥</div>
+                        <h3 class="card-title">إدارة المستخدمين</h3>
+                    </div>
+                    <table class="users-table">
+                        <thead>
+                            <tr>
+                                <th>المستخدم</th>
+                                <th>الدور</th>
+                                <th>الحالة</th>
+                                <th>الموقع</th>
+                                <th>عنوان IP</th>
+                                <th>الجهاز</th>
+                                <th>آخر ظهور</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody">
+                            <tr>
+                                <td>
+                                    <div class="user-info">
+                                        <div class="user-avatar">أ</div>
+                                        <div>
+                                            <div style="font-weight: 600;">أحمد محمد</div>
+                                            <div style="font-size: 12px; color: #888;">مدير النظام</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="role-badge role-admin">أدمين</span></td>
+                                <td><span class="status-badge status-online">متصل</span></td>
+                                <td>الرياض، السعودية</td>
+                                <td style="font-family: monospace;">192.168.1.100</td>
+                                <td>Chrome/Windows</td>
+                                <td>الآن</td>
+                                <td>
+                                    <button onclick="manageUser('approve')" style="background: rgba(0,255,0,0.2); color: #00ff00; border: none; padding: 5px 10px; border-radius: 5px; margin-left: 5px; cursor: pointer;">✓</button>
+                                    <button onclick="manageUser('block')" style="background: rgba(255,0,0,0.2); color: #ff4444; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">✗</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="user-info">
+                                        <div class="user-avatar">س</div>
+                                        <div>
+                                            <div style="font-weight: 600;">سارة أحمد</div>
+                                            <div style="font-size: 12px; color: #888;">مديرة الجودة</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="role-badge role-admin">أدمين</span></td>
+                                <td><span class="status-badge status-online">متصل</span></td>
+                                <td>جدة، السعودية</td>
+                                <td style="font-family: monospace;">192.168.1.101</td>
+                                <td>Firefox/Mac</td>
+                                <td>الآن</td>
+                                <td>
+                                    <button onclick="manageUser('approve')" style="background: rgba(0,255,0,0.2); color: #00ff00; border: none; padding: 5px 10px; border-radius: 5px; margin-left: 5px; cursor: pointer;">✓</button>
+                                    <button onclick="manageUser('block')" style="background: rgba(255,0,0,0.2); color: #ff4444; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">✗</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="user-info">
+                                        <div class="user-avatar">م</div>
+                                        <div>
+                                            <div style="font-weight: 600;">محمد علي</div>
+                                            <div style="font-size: 12px; color: #888;">مختبر أتمتة</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="role-badge role-tester">مختبر</span></td>
+                                <td><span class="status-badge status-busy">مشغول</span></td>
+                                <td>الدمام، السعودية</td>
+                                <td style="font-family: monospace;">192.168.1.102</td>
+                                <td>Safari/iPhone</td>
+                                <td>5 دقائق</td>
+                                <td>
+                                    <button onclick="manageUser('approve')" style="background: rgba(0,255,0,0.2); color: #00ff00; border: none; padding: 5px 10px; border-radius: 5px; margin-left: 5px; cursor: pointer;">✓</button>
+                                    <button onclick="manageUser('block')" style="background: rgba(255,0,0,0.2); color: #ff4444; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">✗</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="user-info">
+                                        <div class="user-avatar">ي</div>
+                                        <div>
+                                            <div style="font-weight: 600;">يوسف خالد</div>
+                                            <div style="font-size: 12px; color: #888;">زائر جديد</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="role-badge role-visitor">زائر</span></td>
+                                <td><span class="status-badge status-online">متصل</span></td>
+                                <td>القاهرة، مصر</td>
+                                <td style="font-family: monospace;">203.45.67.89</td>
+                                <td>Chrome/Android</td>
+                                <td>الآن</td>
+                                <td>
+                                    <button onclick="manageUser('approve')" style="background: rgba(0,255,0,0.2); color: #00ff00; border: none; padding: 5px 10px; border-radius: 5px; margin-left: 5px; cursor: pointer;">✓</button>
+                                    <button onclick="manageUser('block')" style="background: rgba(255,0,0,0.2); color: #ff4444; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">✗</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Chat Tab -->
+            <div id="chat" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">💬</div>
+                        <h3 class="card-title">دردشة المستخدمين</h3>
+                    </div>
+                    <div class="chat-container">
+                        <div>
+                            <div class="chat-messages" id="chatMessages">
+                                <div class="chat-message message-system">
+                                    <div class="message-header">النظام</div>
+                                    <div>مرحباً بكم في دردشة فريق TEST Team 15x3</div>
+                                    <div class="message-time">14:30</div>
+                                </div>
+                                <div class="chat-message message-user">
+                                    <div class="message-header">يوسف خالد</div>
+                                    <div>مرحباً، أحتاج مساعدة في فهم خدماتكم</div>
+                                    <div class="message-time">14:32</div>
+                                </div>
+                                <div class="chat-message message-admin">
+                                    <div class="message-header">أحمد محمد (أدمين)</div>
+                                    <div>أهلاً وسهلاً، سأساعدك بكل سرور. ما هي الخدمة التي تريد معرفة المزيد عنها؟</div>
+                                    <div class="message-time">14:33</div>
+                                </div>
+                                <div class="chat-message message-user">
+                                    <div class="message-header">يوسف خالد</div>
+                                    <div>أريد معرفة المزيد عن خدمات اختبار التطبيقات</div>
+                                    <div class="message-time">14:35</div>
+                                </div>
+                            </div>
+                            <div class="chat-input-container">
+                                <input type="text" class="chat-input" id="chatInput" placeholder="اكتب رسالتك هنا..." onkeypress="handleChatKeyPress(event)">
+                                <button class="chat-send-btn" onclick="sendAdminMessage()">إرسال</button>
+                            </div>
+                        </div>
+                        <div class="online-users">
+                            <h4 style="color: #00ffff; margin-bottom: 15px;">المستخدمين النشطين</h4>
+                            <div class="online-user">
+                                <div class="online-dot"></div>
+                                <div class="user-avatar">ي</div>
+                                <div>
+                                    <div style="font-weight: 600; font-size: 14px;">يوسف خالد</div>
+                                    <div style="font-size: 11px; color: #888;">زائر</div>
+                                </div>
+                            </div>
+                            <div class="online-user">
+                                <div class="online-dot"></div>
+                                <div class="user-avatar">م</div>
+                                <div>
+                                    <div style="font-weight: 600; font-size: 14px;">مريم أحمد</div>
+                                    <div style="font-size: 11px; color: #888;">زائر</div>
+                                </div>
+                            </div>
+                            <div class="online-user">
+                                <div class="online-dot"></div>
+                                <div class="user-avatar">ف</div>
+                                <div>
+                                    <div style="font-weight: 600; font-size: 14px;">فاطمة حسن</div>
+                                    <div style="font-size: 11px; color: #888;">مطور</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Logs Tab -->
+            <div id="logs" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">📋</div>
+                        <h3 class="card-title">سجل النظام</h3>
+                    </div>
+                    <div id="systemLogs">
+                        <div class="log-entry log-success">
+                            <div class="log-icon">✓</div>
+                            <div class="log-content">
+                                <div class="log-message">تم تسجيل دخول مستخدم جديد بنجاح</div>
+                                <div class="log-meta">14:30 • يوسف خالد • IP: 203.45.67.89</div>
+                            </div>
+                        </div>
+                        <div class="log-entry log-info">
+                            <div class="log-icon">ℹ</div>
+                            <div class="log-content">
+                                <div class="log-message">تم تحديث إعدادات النظام</div>
+                                <div class="log-meta">14:25 • أحمد محمد • إعدادات الأمان</div>
+                            </div>
+                        </div>
+                        <div class="log-entry log-warning">
+                            <div class="log-icon">⚠</div>
+                            <div class="log-content">
+                                <div class="log-message">محاولة دخول مشبوهة تم رصدها</div>
+                                <div class="log-meta">14:20 • IP: 45.67.89.123 • محاولات متعددة</div>
+                            </div>
+                        </div>
+                        <div class="log-entry log-error">
+                            <div class="log-icon">✗</div>
+                            <div class="log-content">
+                                <div class="log-message">فشل في الاتصال بقاعدة البيانات</div>
+                                <div class="log-meta">14:15 • خادم قاعدة البيانات • انقطاع مؤقت</div>
+                            </div>
+                        </div>
+                        <div class="log-entry log-success">
+                            <div class="log-icon">✓</div>
+                            <div class="log-content">
+                                <div class="log-message">تم إنشاء نسخة احتياطية بنجاح</div>
+                                <div class="log-meta">14:10 • النظام • نسخة احتياطية يومية</div>
+                            </div>
+                        </div>
+                        <div class="log-entry log-info">
+                            <div class="log-icon">ℹ</div>
+                            <div class="log-content">
+                                <div class="log-message">تم تحديث برنامج مكافحة الفيروسات</div>
+                                <div class="log-meta">14:05 • النظام • تحديث تلقائي</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security Tab -->
+            <div id="security" class="tab-content">
+                <div class="security-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon">🛡️</div>
+                            <h3 class="card-title">حالة الأمان</h3>
+                        </div>
+                        <div style="space-y: 15px;">
+                            <div class="security-item security-active">
+                                <div class="security-info">
+                                    <div class="security-icon">🔥</div>
+                                    <div>
+                                        <div style="font-weight: 600;">جدار الحماية</div>
+                                        <div style="font-size: 12px; color: #888;">حماية متقدمة من التهديدات</div>
+                                    </div>
+                                </div>
+                                <div class="security-status status-active">نشط</div>
+                            </div>
+                            <div class="security-item security-active">
+                                <div class="security-info">
+                                    <div class="security-icon">👁️</div>
+                                    <div>
+                                        <div style="font-weight: 600;">كشف التسلل</div>
+                                        <div style="font-size: 12px; color: #888;">مراقبة النشاط المشبوه</div>
+                                    </div>
+                                </div>
+                                <div class="security-status status-active">نشط</div>
+                            </div>
+                            <div class="security-item security-active">
+                                <div class="security-info">
+                                    <div class="security-icon">🔐</div>
+                                    <div>
+                                        <div style="font-weight: 600;">تشفير البيانات</div>
+                                        <div style="font-size: 12px; color: #888;">حماية البيانات الحساسة</div>
+                                    </div>
+                                </div>
+                                <div class="security-status status-active">مفعل</div>
+                            </div>
+                            <div class="security-item security-active">
+                                <div class="security-info">
+                                    <div class="security-icon">📡</div>
+                                    <div>
+                                        <div style="font-weight: 600;">مراقبة الشبكة</div>
+                                        <div style="font-size: 12px; color: #888;">تحليل حركة البيانات</div>
+                                    </div>
+                                </div>
+                                <div class="security-status status-active">نشط</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon">⚠️</div>
+                            <h3 class="card-title">تنبيهات أمنية</h3>
+                        </div>
+                        <div>
+                            <div class="log-entry log-warning">
+                                <div class="log-icon">⚠</div>
+                                <div class="log-content">
+                                    <div class="log-message">محاولة دخول مشبوهة من IP خارجي</div>
+                                    <div class="log-meta">منذ 5 دقائق • IP: 45.67.89.123</div>
+                                </div>
+                            </div>
+                            <div class="log-entry log-info">
+                                <div class="log-icon">ℹ</div>
+                                <div class="log-content">
+                                    <div class="log-message">تم تحديث كلمة مرور المستخدم</div>
+                                    <div class="log-meta">منذ 15 دقيقة • محمد علي</div>
+                                </div>
+                            </div>
+                            <div class="log-entry log-error">
+                                <div class="log-icon">✗</div>
+                                <div class="log-content">
+                                    <div class="log-message">فشل في المصادقة الثنائية</div>
+                                    <div class="log-meta">منذ 30 دقيقة • مستخدم غير معروف</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">⚡</div>
+                        <h3 class="card-title">أدوات الهكر الأخلاقي</h3>
+                    </div>
+                    <div class="tools-grid">
+                        <div class="tool-card">
+                            <div class="tool-icon">🔍</div>
+                            <div class="tool-name">فحص الثغرات</div>
+                            <div class="tool-status">جاهز للتشغيل</div>
+                            <button class="tool-btn" onclick="runTool('vulnerability')">تشغيل الفحص</button>
+                        </div>
+                        <div class="tool-card">
+                            <div class="tool-icon">🎯</div>
+                            <div class="tool-name">اختبار الاختراق</div>
+                            <div class="tool-status">قيد التشغيل</div>
+                            <button class="tool-btn" onclick="runTool('penetration')">عرض النتائج</button>
+                        </div>
+                        <div class="tool-card">
+                            <div class="tool-icon">📊</div>
+                            <div class="tool-name">مراقبة الشبكة</div>
+                            <div class="tool-status">نشط</div>
+                            <button class="tool-btn" onclick="runTool('network')">عرض التقرير</button>
+                        </div>
+                        <div class="tool-card">
+                            <div class="tool-icon">🔐</div>
+                            <div class="tool-name">تحليل كلمات المرور</div>
+                            <div class="tool-status">متوقف</div>
+                            <button class="tool-btn" onclick="runTool('password')">بدء التحليل</button>
+                        </div>
+                        <div class="tool-card">
+                            <div class="tool-icon">🌐</div>
+                            <div class="tool-name">فحص المواقع</div>
+                            <div class="tool-status">جاهز</div>
+                            <button class="tool-btn" onclick="runTool('website')">فحص جديد</button>
+                        </div>
+                        <div class="tool-card">
+                            <div class="tool-icon">📱</div>
+                            <div class="tool-name">اختبار التطبيقات</div>
+                            <div class="tool-status">متاح</div>
+                            <button class="tool-btn" onclick="runTool('mobile')">بدء الاختبار</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Global variables
+        let currentTab = 'overview';
+        let chatMessages = [];
+        let systemLogs = [];
+        let users = [];
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeDashboard();
+            startRealTimeUpdates();
+        });
+
+        function initializeDashboard() {
+            // Initialize sample data
+            users = [
+                { id: 1, name: 'أحمد محمد', role: 'admin', status: 'online', location: 'الرياض', ip: '192.168.1.100' },
+                { id: 2, name: 'سارة أحمد', role: 'admin', status: 'online', location: 'جدة', ip: '192.168.1.101' },
+                { id: 3, name: 'محمد علي', role: 'tester', status: 'busy', location: 'الدمام', ip: '192.168.1.102' },
+                { id: 4, name: 'يوسف خالد', role: 'visitor', status: 'online', location: 'القاهرة', ip: '203.45.67.89' },
+                { id: 5, name: 'مريم أحمد', role: 'visitor', status: 'online', location: 'دبي', ip: '185.23.45.67' }
+            ];
+
+            updateStats();
+        }
+
+        function showTab(tabName) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+
+            // Update navigation
+            const navTabs = document.querySelectorAll('.nav-tab');
+            navTabs.forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+
+            currentTab = tabName;
+        }
+
+        function updateStats() {
+            const totalUsers = users.length;
+            const onlineUsers = users.filter(u => u.status === 'online').length;
+            const visitors = users.filter(u => u.role === 'visitor').length;
+            const activeChats = 3; // Static for demo
+
+            document.getElementById('totalUsers').textContent = totalUsers;
+            document.getElementById('onlineUsers').textContent = onlineUsers;
+            document.getElementById('visitors').textContent = visitors;
+            document.getElementById('activeChats').textContent = activeChats;
+        }
+
+        function sendAdminMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                const chatMessages = document.getElementById('chatMessages');
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'chat-message message-admin';
+                messageDiv.innerHTML = `
+                    <div class="message-header">أحمد محمد (أدمين)</div>
+                    <div>${message}</div>
+                    <div class="message-time">${new Date().toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' })}</div>
+                `;
+                
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                input.value = '';
+
+                // Simulate user response after delay
+                setTimeout(() => {
+                    const responses = [
+                        'شكراً لك على المساعدة',
+                        'هذا مفيد جداً',
+                        'أقدر وقتك',
+                        'ممتاز، شكراً',
+                        'واضح الآن'
+                    ];
+                    const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                    
+                    const responseDiv = document.createElement('div');
+                    responseDiv.className = 'chat-message message-user';
+                    responseDiv.innerHTML = `
+                        <div class="message-header">يوسف خالد</div>
+                        <div>${randomResponse}</div>
+                        <div class="message-time">${new Date().toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' })}</div>
+                    `;
+                    
+                    chatMessages.appendChild(responseDiv);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }, 2000 + Math.random() * 3000);
+            }
+        }
+
+        function handleChatKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendAdminMessage();
+            }
+        }
+
+        function manageUser(action) {
+            const actions = {
+                'approve': 'تم قبول المستخدم',
+                'block': 'تم حظر المستخدم'
+            };
+            
+            // Add to system logs
+            addSystemLog('info', actions[action], 'أحمد محمد');
+            
+            // Show notification
+            showNotification(actions[action], action === 'approve' ? 'success' : 'warning');
+        }
+
+        function runTool(toolName) {
+            const tools = {
+                'vulnerability': 'بدء فحص الثغرات الأمنية',
+                'penetration': 'تشغيل اختبار الاختراق',
+                'network': 'مراقبة حركة الشبكة',
+                'password': 'تحليل قوة كلمات المرور',
+                'website': 'فحص أمان الموقع',
+                'mobile': 'اختبار أمان التطبيق'
+            };
+            
+            addSystemLog('info', tools[toolName], 'النظام');
+            showNotification(`تم ${tools[toolName]} بنجاح`, 'success');
+        }
+
+        function addSystemLog(type, message, user) {
+            const logsContainer = document.getElementById('systemLogs');
+            const logDiv = document.createElement('div');
+            logDiv.className = `log-entry log-${type}`;
+            
+            const icons = {
+                'success': '✓',
+                'warning': '⚠',
+                'error': '✗',
+                'info': 'ℹ'
+            };
+            
+            logDiv.innerHTML = `
+                <div class="log-icon">${icons[type]}</div>
+                <div class="log-content">
+                    <div class="log-message">${message}</div>
+                    <div class="log-meta">${new Date().toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' })} • ${user}</div>
+                </div>
+            `;
+            
+            logsContainer.insertBefore(logDiv, logsContainer.firstChild);
+            
+            // Keep only last 10 logs
+            const logs = logsContainer.querySelectorAll('.log-entry');
+            if (logs.length > 10) {
+                logsContainer.removeChild(logs[logs.length - 1]);
+            }
+        }
+
+        function showNotification(message, type) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? 'rgba(0,255,0,0.2)' : type === 'warning' ? 'rgba(255,165,0,0.2)' : 'rgba(255,0,0,0.2)'};
+                color: ${type === 'success' ? '#00ff00' : type === 'warning' ? '#ffa500' : '#ff4444'};
+                padding: 15px 20px;
+                border-radius: 10px;
+                border: 1px solid ${type === 'success' ? '#00ff00' : type === 'warning' ? '#ffa500' : '#ff4444'};
+                z-index: 1000;
+                backdrop-filter: blur(10px);
+                animation: slideIn 0.3s ease;
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        function startRealTimeUpdates() {
+            // Update stats every 5 seconds
+            setInterval(() => {
+                // Simulate random changes
+                const onlineCount = document.getElementById('onlineUsers');
+                const currentOnline = parseInt(onlineCount.textContent);
+                const newOnline = Math.max(5, Math.min(12, currentOnline + (Math.random() > 0.5 ? 1 : -1)));
+                onlineCount.textContent = newOnline;
+                
+                // Add random system logs
+                if (Math.random() > 0.8) {
+                    const logTypes = ['info', 'success', 'warning'];
+                    const messages = [
+                        'تم تحديث بيانات المستخدم',
+                        'نشاط جديد تم رصده',
+                        'تم إنجاز مهمة بنجاح',
+                        'تحديث أمني جديد',
+                        'تم تسجيل دخول مستخدم',
+                        'تم إنشاء نسخة احتياطية'
+                    ];
+                    
+                    const randomType = logTypes[Math.floor(Math.random() * logTypes.length)];
+                    const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+                    
+                    addSystemLog(randomType, randomMessage, 'النظام');
+                }
+            }, 5000);
+
+            // Update real-time activity
+            setInterval(() => {
+                const activityContainer = document.getElementById('realtimeActivity');
+                if (Math.random() > 0.7) {
+                    const activities = [
+                        { type: 'success', message: 'تم تسجيل دخول مستخدم جديد', user: 'زائر جديد' },
+                        { type: 'info', message: 'تحديث إعدادات النظام', user: 'أحمد محمد' },
+                        { type: 'warning', message: 'محاولة دخول مشبوهة', user: 'IP غير معروف' }
+                    ];
+                    
+                    const activity = activities[Math.floor(Math.random() * activities.length)];
+                    const activityDiv = document.createElement('div');
+                    activityDiv.className = `log-entry log-${activity.type}`;
+                    activityDiv.innerHTML = `
+                        <div class="log-icon">${activity.type === 'success' ? '✓' : activity.type === 'warning' ? '⚠' : 'ℹ'}</div>
+                        <div class="log-content">
+                            <div class="log-message">${activity.message}</div>
+                            <div class="log-meta">الآن • ${activity.user}</div>
+                        </div>
+                    `;
+                    
+                    activityContainer.insertBefore(activityDiv, activityContainer.firstChild);
+                    
+                    // Keep only last 3 activities
+                    const activities_list = activityContainer.querySelectorAll('.log-entry');
+                    if (activities_list.length > 3) {
+                        activityContainer.removeChild(activities_list[activities_list.length - 1]);
+                    }
+                }
+            }, 8000);
+        }
+
+        // Add CSS animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
