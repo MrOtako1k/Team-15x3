@@ -1,70 +1,0 @@
-            <!-- إدارة المتطلبات والمشاريع -->
-            <div class="admin-card">
-                <div class="card-header">
-                    <span class="card-icon">🚀</span>
-                    <h3 class="card-title">إدارة المتطلبات والمشاريع</h3>
-                </div>
-                <div class="requirements-container">
-                    <div class="requirements-header">
-                        <div class="req-stats">
-                            <div class="req-stat-item">
-                                <span class="req-number" id="pendingRequests">5</span>
-                                <span class="req-label">متطلبات في الانتظار</span>
-                            </div>
-                            <div class="req-stat-item">
-                                <span class="req-number" id="activeProjects">3</span>
-                                <span class="req-label">مشاريع نشطة</span>
-                            </div>
-                            <div class="req-stat-item">
-                                <span class="req-number" id="completedToday">2</span>
-                                <span class="req-label">مكتملة اليوم</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="requirements-tabs">
-                        <button class="tab-btn active" onclick="switchTab('pending')">المتطلبات المعلقة</button>
-                        <button class="tab-btn" onclick="switchTab('active')">المشاريع النشطة</button>
-                        <button class="tab-btn" onclick="switchTab('completed')">المكتملة</button>
-                    </div>
-                    
-                    <div class="requirements-list" id="requirementsList">
-                        <!-- سيتم ملء المتطلبات هنا -->
-                    </div>
-                    
-                    <div class="project-actions">
-                        <button class="action-btn btn-success" onclick="createNewProject()">
-                            <span>➕</span> إنشاء مشروع جديد
-                        </button>
-                        <button class="action-btn btn-info" onclick="importRequirements()">
-                            <span>📥</span> استيراد متطلبات
-                        </button>
-                        <button class="action-btn btn-warning" onclick="generateReport()">
-                            <span>📋</span> تقرير المشاريع
-                        </button>
-                        <button class="action-btn btn-danger" onclick="archiveCompleted()">
-                            <span>🗃️</span> أرشفة المكتملة
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- دردشة الأدمين -->
-            <div class="admin-card">
-                <div class="card-header">
-                    <span class="card-icon">💬</span>
-                    <h3 class="card-title">دردشة مراقبة المحادثات</h3>
-                </div>
-                <div class="chat-container">
-                    <div class="chat-header">
-                        مراقبة المحادثات المباشرة - عدد الرسائل النشطة: <span id="activeMsgCount">7</span>
-                    </div>
-                    <div class="chat-messages" id="adminChatMessages">
-                        <div class="chat-message system">تم بدء مراقبة الدردشة في <span id="currentTime"></span></div>
-                    </div>
-                    <div class="chat-input-area">
-                        <input type="text" class="chat-input" id="adminChatInput" placeholder="رد كأدمين على جميع الزوار..." onkeypress="handleAdminChatKeyPress(event)">
-                        <button class="send-btn" onclick="sendAdminMessage()">إرسال للجميع</button>
-                    </div>
-                </div>
-            </div>
