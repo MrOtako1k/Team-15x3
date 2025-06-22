@@ -67,9 +67,13 @@
             align-items: center;
         }
 
-        .logout-btn, .back-btn {
-            background: linear-gradient(135deg, #f87171 0%, #dc2626 100%);
-            color: white;
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .logout-btn, .back-btn, .visitor-management-btn {
             padding: 10px 20px;
             border: none;
             border-radius: 20px;
@@ -81,13 +85,29 @@
             margin: 0 5px;
         }
 
-        .back-btn {
-            background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+        .logout-btn {
+            background: linear-gradient(135deg, #f87171 0%, #dc2626 100%);
+            color: white;
         }
 
-        .logout-btn:hover, .back-btn:hover {
+        .back-btn {
+            background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+            color: white;
+        }
+
+        .visitor-management-btn {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: white;
+            font-size: 0.9em;
+        }
+
+        .logout-btn:hover, .back-btn:hover, .visitor-management-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(248, 113, 113, 0.4);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .visitor-management-btn:hover {
+            box-shadow: 0 5px 15px rgba(139, 92, 246, 0.4);
         }
 
         .dashboard-grid {
@@ -347,6 +367,11 @@
             color: white;
         }
 
+        .btn-purple {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: white;
+        }
+
         .action-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
@@ -407,6 +432,15 @@
             .visitor-stats {
                 grid-template-columns: 1fr;
             }
+
+            .header-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .header-buttons a, .header-buttons button {
+                margin: 2px 0;
+            }
         }
     </style>
 </head>
@@ -423,7 +457,8 @@
                         آخر دخول: الآن | المنطقة الزمنية: GMT+3
                     </div>
                 </div>
-                <div>
+                <div class="header-buttons">
+                    <a href="visitor-management.html" class="visitor-management-btn">👥 إدارة الزوار الشاملة</a>
                     <a href="index.html" class="back-btn">العودة للرئيسية</a>
                     <button class="logout-btn" onclick="logout()">تسجيل خروج</button>
                 </div>
@@ -476,7 +511,7 @@
                 </div>
                 <div class="action-buttons">
                     <button class="action-btn btn-success" onclick="sendBroadcast()">📢 رسالة جماعية</button>
-                    <button class="action-btn btn-danger" onclick="manageUsers()">⚙️ إدارة المستخدمين</button>
+                    <button class="action-btn btn-purple" onclick="openVisitorManagement()">👥 إدارة شاملة</button>
                 </div>
             </div>
 
@@ -679,8 +714,8 @@
             }
         }
 
-        function manageUsers() {
-            showNotification('فتح نافذة إدارة المستخدمين...');
+        function openVisitorManagement() {
+            window.location.href = 'visitor-management.html';
         }
 
         function logout() {
