@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة الزوار - TEST Team 15x3</title>
+    <script src="shared-data.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1e3a8a 0%, #7c2d12 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        h1 {
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+        }
+
+        .header-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .search-container {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex: 1;
+            max-width: 500px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 25px;
+            font-size: 14px;
+            outline: none;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .filter-select {
+            padding: 12px 15px;
+            border: none;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            cursor: pointer;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin: 0 5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .stats-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #1e40af;
+            display: block;
+        }
+
+        .stat-label {
+            color: #6b7280;
+            margin-top: 5px;
+            font-size: 0.9em;
+        }
+
+        .visitors-table-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .table-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #1e40af;
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .visitors-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .visitors-table th,
+        .visitors-table td {
+            padding: 15px 12px;
+            text-align: right;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .visitors-table th {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            font-weight: bold;
+            color: #1e40af;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .visitors-table tr:hover {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+            text-align: center;
+            display: inline-block;
+            min-width: 80px;
+        }
+
+        .status-online {
+            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+            color: #166534;
+        }
+
+        .status-offline {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            color: #991b1b;
+        }
+
+        .status-busy {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            color: #92400e;
+        }
+
+        .status-banned {
+            background: linear-gradient(135deg, #fecaca 0%, #f87171 100%);
+            color: #7f1d1d;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+        }
+
+        .action-btn {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.8em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-view {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-message {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-ban {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-unban {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .visitor-details-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .modal-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #1e40af;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: #6b7280;
+            padding: 5px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: #f3f4f6;
+            color: #ef4444;
+        }
+
+        .detail-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border-right: 4px solid #3b82f6;
+        }
+
+        .detail-title {
+            font-weight: bold;
+            color: #1e40af;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding: 5px 0;
+        }
+
+        .detail-label {
+            font-weight: bold;
+            color: #4b5563;
+        }
+
+        .detail-value {
+            color: #6b7280;
+        }
+
+        .message-history {
+            max-height: 200px;
+            overflow-y: auto;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        .message-item {
+            padding: 8px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            font-size: 0.9em;
+        }
+
+        .message-sent {
+            background: #dcfce7;
+            text-align: right;
+        }
+
+        .message-received {
+            background: #ddd6fe;
+            text-align: left;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+            gap: 10px;
+        }
+
+        .pagination button {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .pagination button:hover {
+            background: #f3f4f6;
+        }
+
+        .pagination button.active {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+
+        .bulk-actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+
+        .select-all-checkbox {
+            margin-left: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-container {
+                max-width: 100%;
+            }
+            
+            .stats-overview {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .visitors-table {
+                font-size: 0.8em;
+            }
+            
+            .visitors-table th,
+            .visitors-table td {
+                padding: 8px 6px;
+            }
+            
+            .modal-content {
+                width: 95%;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔍 إدارة الزوار الشاملة</h1>
+            <div class="header-controls">
+                <div class="search-container">
+                    <input type="text" class="search-input" id="searchInput" placeholder="البحث في الزوار (الاسم، IP، البريد الإلكتروني...)">
+                    <select class="filter-select" id="statusFilter">
+                        <option value="all">جميع الحالات</option>
+                        <option value="online">متصل</option>
+                        <option value="offline">غير متصل</option>
+                        <option value="busy">مشغول</option>
+                        <option value="banned">محظور</option>
+                    </select>
+                    <button class="btn btn-primary" onclick="searchVisitors()">🔍 بحث</button>
+                </div>
+                <div>
+                    <a href="admin_dashboard_panel.html" class="btn btn-secondary">العودة للوحة التحكم</a>
+                    <button class="btn btn-warning" onclick="exportVisitorData()">📊 تصدير البيانات</button>
+                    <button class="btn btn-danger" onclick="clearBannedUsers()">🗑️ مسح المحظورين</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- إحصائيات سريعة -->
+        <div class="stats-overview">
+            <div class="stat-card">
+                <span class="stat-number" id="totalVisitorsCount">0</span>
+                <div class="stat-label">إجمالي الزوار</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number" id="onlineVisitorsCount">0</span>
+                <div class="stat-label">متصل الآن</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number" id="bannedVisitorsCount">0</span>
+                <div class="stat-label">محظور</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number" id="todayVisitorsCount">0</span>
+                <div class="stat-label">زوار اليوم</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number" id="totalMessagesCount">0</span>
+                <div class="stat-label">إجمالي الرسائل</div>
+            </div>
+        </div>
+
+        <!-- جدول الزوار -->
+        <div class="visitors-table-container">
+            <div class="table-header">
+                <h2 class="table-title">قائمة الزوار التفصيلية</h2>
+                <div class="table-actions">
+                    <button class="btn btn-primary" onclick="refreshVisitorsList()">🔄 تحديث</button>
+                    <button class="btn btn-success" onclick="sendBulkMessage()">📢 رسالة جماعية</button>
+                </div>
+            </div>
+
+            <div class="bulk-actions">
+                <input type="checkbox" class="select-all-checkbox" id="selectAll" onchange="toggleSelectAll()">
+                <label for="selectAll">تحديد الكل</label>
+                <button class="btn btn-danger" onclick="bulkBanSelected()">حظر المحددين</button>
+                <button class="btn btn-warning" onclick="bulkUnbanSelected()">إلغاء حظر المحددين</button>
+                <span id="selectedCount">0 محدد</span>
+            </div>
+
+            <div style="overflow-x: auto;">
+                <table class="visitors-table">
+                    <thead>
+                        <tr>
+                            <th>تحديد</th>
+                            <th>الاسم</th>
+                            <th>نوع المستخدم</th>
+                            <th>الحالة</th>
+                            <th>عنوان IP</th>
+                            <th>المتصفح</th>
+                            <th>وقت الانضمام</th>
+                            <th>آخر نشاط</th>
+                            <th>عدد الرسائل</th>
+                            <th>الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="visitorsTableBody">
+                        <!-- سيتم ملء البيانات هنا -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination" id="pagination">
+                <!-- أزرار التنقل بين الصفحات -->
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة تفاصيل الزائر -->
+    <div class="visitor-details-modal" id="visitorDetailsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">تفاصيل الزائر</h3>
+                <button class="close-btn" onclick="closeVisitorDetails()">&times;</button>
+            </div>
+            <div id="visitorDetailsContent">
+                <!-- سيتم ملء التفاصيل هنا -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let dataManager = window.sharedDataManager;
+        let currentPage = 1;
+        let itemsPerPage = 10;
+        let filteredVisitors = [];
+        let selectedVisitors = new Set();
+
+        // تحديث الإحصائيات
+        function updateStats() {
+            const data = dataManager.getData();
+            const allVisitors = [...Object.values(data.users), ...data.visitors];
+            const today = new Date().toDateString();
+            
+            document.getElementById('totalVisitorsCount').textContent = allVisitors.length;
+            document.getElementById('onlineVisitorsCount').textContent = 
+                allVisitors.filter(v => v.status === 'online').length;
+            document.getElementById('bannedVisitorsCount').textContent = 
+                allVisitors.filter(v => v.status === 'banned').length;
+            document.getElementById('todayVisitorsCount').textContent = 
+                allVisitors.filter(v => new Date(v.joinTime || v.lastSeen).toDateString() === today).length;
+            document.getElementById('totalMessagesCount').textContent = data.messages.length;
+        }
+
+        // إنشاء معلومات وهمية للزوار
+        function generateVisitorInfo(visitor, isUser = false) {
+            const browsers = ['Chrome', 'Firefox', 'Safari', 'Edge', 'Opera'];
+            const ips = ['192.168.1.', '10.0.0.', '172.16.0.', '203.0.113.'];
+            
+            return {
+                ...visitor,
+                ip: visitor.ip || (ips[Math.floor(Math.random() * ips.length)] + Math.floor(Math.random() * 255)),
+                browser: visitor.browser || browsers[Math.floor(Math.random() * browsers.length)],
+                messageCount: visitor.messageCount || Math.floor(Math.random() * 50),
+                joinTime: visitor.joinTime || new Date(Date.now() - Math.random() * 86400000).toISOString(),
+                lastActivity: visitor.lastActivity || new Date(Date.now() - Math.random() * 3600000).toISOString(),
+                type: isUser ? 'مستخدم مسجل' : 'زائر'
+            };
+        }
+
+        // تحديث جدول الزوار
+        function updateVisitorsTable() {
+            const data = dataManager.getData();
+            const users = Object.entries(data.users).map(([username, user]) => 
+                generateVisitorInfo({...user, username, name: user.fullName}, true)
+            );
+            const visitors = data.visitors.map(visitor => generateVisitorInfo(visitor));
+            
+            filteredVisitors = [...users, ...visitors];
+            
+            // تطبيق الفلاتر
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const statusFilter = document.getElementById('statusFilter').value;
+            
+            if (searchTerm) {
+                filteredVisitors = filteredVisitors.filter(visitor => 
+                    visitor.name.toLowerCase().includes(searchTerm) ||
+                    visitor.ip.includes(searchTerm) ||
+                    (visitor.username && visitor.username.toLowerCase().includes(searchTerm))
+                );
+            }
+            
+            if (statusFilter !== 'all') {
+                filteredVisitors = filteredVisitors.filter(visitor => visitor.status === statusFilter);
+            }
+            
+            renderVisitorsTable();
+            renderPagination();
+        }
+
+        // عرض جدول الزوار
+        function renderVisitorsTable() {
+            const tbody = document.getElementById('visitorsTableBody');
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const pageVisitors = filteredVisitors.slice(startIndex, endIndex);
+            
+            tbody.innerHTML = '';
+            
+            pageVisitors.forEach(visitor => {
+                const row = document.createElement('tr');
+                const visitorId = visitor.username || visitor.name;
+                
+                row.innerHTML = `
+                    <td>
+                        <input type="checkbox" class="visitor-checkbox" value="${visitorId}" 
+                               onchange="updateSelectedCount()" ${selectedVisitors.has(visitorId) ? 'checked' : ''}>
+                    </td>
+                    <td><strong>${visitor.name}</strong></td>
+                    <td>${visitor.type}</td>
+                    <td><span class="status-badge status-${visitor.status}">${getStatusText(visitor.status)}</span></td>
+                    <td><code>${visitor.ip}</code></td>
+                    <td>${visitor.browser}</td>
+                    <td>${new Date(visitor.joinTime).toLocaleString('ar-SA')}</td>
+                    <td>${new Date(visitor.lastActivity).toLocaleString('ar-SA')}</td>
+                    <td><span class="status-badge status-online">${visitor.messageCount}</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="action-btn btn-view" onclick="showVisitorDetails('${visitorId}')">👁️ عرض</button>
+                            <button class="action-btn btn-message" onclick="sendPrivateMessage('${visitorId}')">💬 رسالة</button>
+                            ${visitor.status === 'banned' ? 
+                                `<button class="action-btn btn-unban" onclick="unbanVisitor('${visitorId}')">✅ إلغاء حظر</button>` :
+                                `<button class="action-btn btn-ban" onclick="banVisitor('${visitorId}')">🚫 حظر</button>`
+                            }
+                        </div>
+                    </td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+        }
+
+        // عرض أزرار التنقل
+        function renderPagination() {
+            const pagination = document.getElementById('pagination');
+            const totalPages = Math.ceil(filteredVisitors.length / itemsPerPage);
+            
+            pagination.innerHTML = '';
+            
+            if (totalPages <= 1) return;
+            
+            // زر السابق
+            const prevBtn = document.createElement('button');
+            prevBtn.textContent = '« السابق';
+            prevBtn.disabled = currentPage === 1;
+            prevBtn.onclick = () => changePage(currentPage - 1);
+            pagination.appendChild(prevBtn);
+            
+            // أرقام الصفحات
+            for (let i = 1; i <= totalPages; i++) {
+                const pageBtn = document.createElement('button');
+                pageBtn.textContent = i;
+                pageBtn.className = i === currentPage ? 'active' : '';
+                pageBtn.onclick = () => changePage(i);
+                pagination.appendChild(pageBtn);
+            }
+            
+            // زر التالي
+            const nextBtn = document.createElement('button');
+            nextBtn.textContent = 'التالي »';
+            nextBtn.disabled = currentPage === totalPages;
+            nextBtn.onclick = () => changePage(currentPage + 1);
+            pagination.appendChild(nextBtn);
+        }
+
+        // تغيير الصفحة
+        function changePage(page) {
+            currentPage = page;
+            renderVisitorsTable();
+            renderPagination();
+        }
+
+        // الحصول على نص الحالة
+        function getStatusText(status) {
+            const statusTexts = {
+                'online': 'متصل',
+                'offline': 'غير متصل',
+                'busy': 'مشغول',
+                'banned': 'محظور'
+            };
+            return statusTexts[status] || status;
+        }
+
+        // عرض تفاصيل الزائر
+        function showVisitorDetails(visitorId) {
+            const visitor = filteredVisitors.find(v => (v.username || v.name) === visitorId);
+            if (!visitor) return;
+            
+            const modal = document.getElementById('visitorDetailsModal');
+            const content = document.getElementById('visitorDetailsContent');
+            
+            // إنشاء تاريخ رسائل وهمي
+            const messageHistory = [];
+            for (let i = 0; i < visitor.messageCount; i++) {
+                messageHistory.push({
+                    type: Math.random() > 0.5 ? 'sent' : 'received',
+                    content: `رسالة تجريبية رقم ${i + 1}`,
+                    timestamp: new Date(Date.now() - Math.random() * 86400000).toLocaleString('ar-SA')
+                });
+            }
+            
+            content.innerHTML = `
+                <div class="detail-section">
+                    <div class="detail-title">📋 المعلومات الأساسية</div>
+                    <div class="detail-item">
+                        <span class="detail-label">الاسم الكامل:</span>
+                        <span class="detail-value">${visitor.name}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">نوع المستخدم:</span>
+                        <span class="detail-value">${visitor.type}</span>
+                    </div>
+                    ${visitor.username ? `
+                    <div class="detail-item">
+                        <span class="detail-label">اسم المستخدم:</span>
+                        <span class="detail-value">${visitor.username}</span>
+                    </div>
+                    ` : ''}
+                    <div class="detail-item">
+                        <span class="detail-label">الحالة الحالية:</span>
+                        <span class="detail-value"><span class="status-badge status-${visitor.status}">${getStatusText(visitor.status)}</span></span>
+                    </div>
+                </div>
+                
+                <div class="detail-section">
+                    <div class="detail-title">🌐 معلومات الاتصال</div>
+                    <div class="detail-item">
+                        <span class="detail-label">عنوان IP:</span>
+                        <span class="detail-value"><code>${visitor.ip}</code></span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">المتصفح:</span>
+                        <span class="detail-value">${visitor.browser}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">وقت الانضمام:</span>
+                        <span class="detail-value">${new Date(visitor.joinTime).toLocaleString('ar-SA')}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">آخر نشاط:</span>
+                        <span class="detail-value">${new Date(visitor.lastActivity).toLocaleString('ar-SA')}</span>
+                    </div>
+                </div>
+                
+                <div class="detail-section">
+                    <div class="detail-title">💬 إحصائيات الرسائل</div>
+                    <div class="detail-item">
+                        <span class="detail-label">إجمالي الرسائل:</span>
+                        <span class="detail-value">${visitor.messageCount}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">متوسط الرسائل يومياً:</span>
+                        <span class="detail-value">${Math.floor(visitor.messageCount / 7)}</span>
+                    </div>
+                </div>
+                
+                <div class="detail-section">
+                    <div class="detail-title">📜 تاريخ الرسائل الأخيرة</div>
+                    <div class="message-history">
+                        ${messageHistory.slice(0, 10).map(msg => `
+                            <div class="message-item message-${msg.type}">
+                                <strong>${msg.type === 'sent' ? 'مرسلة' : 'مستقبلة'}:</strong> ${msg.content}
+                                <br><small>${msg.timestamp}</small>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="btn btn-success" onclick="sendPrivateMessage('${visitorId}')">💬 إرسال رسالة</button>
+                    ${visitor.status === 'banned' ? 
+                        `<button class="btn btn-warning" onclick="unbanVisitor('${visitorId}'); closeVisitorDetails();">✅ إلغاء الحظر</button>` :
+                        `<button class="btn btn-danger" onclick="banVisitor('${visitorId}'); closeVisitorDetails();">🚫 حظر المستخدم</button>`
+                    }
+                </div>
+            `;
+            
+            modal.style.display = 'block';
+        }
+
+        // إغلاق نافذة التفاصيل
+        function closeVisitorDetails() {
+            document.getElementById('visitorDetailsModal').style.display = 'none';
+        }
+
+        // حظر زائر
+        function banVisitor(visitorId) {
+            if (confirm(`هل تريد حظر ${visitorId}؟`)) {
+                // تحديث حالة الزائر في البيانات
+                const data = dataManager.getData();
+                if (data.users[visitorId]) {
+                    data.users[visitorId].status = 'banned';
+                } else {
+                    const visitor = data.visitors.find(v => v.name === visitorId);
+                    if (visitor) visitor.status = 'banned';
+                }
+                
+                dataManager.updateData(data);
+                updateVisitorsTable();
+                updateStats();
+                alert(`تم حظر ${visitorId} بنجاح!`);
+            }
+        }
+
+        // إلغاء حظر زائر
+        function unbanVisitor(visitorId) {
+            if (confirm(`هل تريد إلغاء حظر ${visitorId}؟`)) {
+                const data = dataManager.getData();
+                if (data.users[visitorId]) {
+                    data.users[visitorId].status = 'offline';
+                } else {
+                    const visitor = data.visitors.find(v => v.name === visitorId);
+                    if (visitor) visitor.status = 'offline';
+                }
+                
+                dataManager.updateData(data);
+                updateVisitorsTable();
+                updateStats();
+                alert(`تم إلغاء حظر ${visitorId} بنجاح!`);
+            }
+        }
+
+        // إرسال رسالة خاصة
+        function sendPrivateMessage(visitorId) {
+            const message = prompt(`أدخل الرسالة لـ ${visitorId}:`);
+            if (message) {
+                dataManager.addMessage({
+                    type: 'admin',
+                    sender: 'الأدمين',
+                    content: message,
+                    target: visitorId
+                });
+                alert('تم إرسال الرسالة بنجاح!');
+            }
+        }
+
+        // تحديد/إلغاء تحديد الكل
+        function toggleSelectAll() {
+            const selectAll = document.getElementById('selectAll');
+            const checkboxes = document.querySelectorAll('.visitor-checkbox');
+            
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = selectAll.checked;
+                if (selectAll.checked) {
+                    selectedVisitors.add(checkbox.value);
+                } else {
+                    selectedVisitors.delete(checkbox.value);
+                }
+            });
+            
+            updateSelectedCount();
+        }
+
+        // تحديث عداد المحددين
+        function updateSelectedCount() {
+            const checkboxes = document.querySelectorAll('.visitor-checkbox:checked');
+            selectedVisitors.clear();
+            checkboxes.forEach(checkbox => selectedVisitors.add(checkbox.value));
+            
+            document.getElementById('selectedCount').textContent = `${selectedVisitors.size} محدد`;
+        }
+
+        // حظر المحددين
+        function bulkBanSelected() {
+            if (selectedVisitors.size === 0) {
+                alert('يرجى تحديد زوار للحظر');
+                return;
+            }
+            
+            if (confirm(`هل تريد حظر ${selectedVisitors.size} زائر؟`)) {
+                const data = dataManager.getData();
+                selectedVisitors.forEach(visitorId => {
+                    if (data.users[visitorId]) {
+                        data.users[visitorId].status = 'banned';
+                    } else {
+                        const visitor = data.visitors.find(v => v.name === visitorId);
+                        if (visitor) visitor.status = 'banned';
+                    }
+                });
+                
+                dataManager.updateData(data);
+                selectedVisitors.clear();
+                updateVisitorsTable();
+                updateStats();
+                alert('تم حظر الزوار المحددين بنجاح!');
+            }
+        }
+
+        // إلغاء حظر المحددين
+        function bulkUnbanSelected() {
+            if (selectedVisitors.size === 0) {
+                alert('يرجى تحديد زوار لإلغاء الحظر');
+                return;
+            }
+            
+            if (confirm(`هل تريد إلغاء حظر ${selectedVisitors.size} زائر؟`)) {
+                const data = dataManager.getData();
+                selectedVisitors.forEach(visitorId => {
+                    if (data.users[visitorId]) {
+                        data.users[visitorId].status = 'offline';
+                    } else {
+                        const visitor = data.visitors.find(v => v.name === visitorId);
+                        if (visitor) visitor.status = 'offline';
+                    }
+                });
+                
+                dataManager.updateData(data);
+                selectedVisitors.clear();
+                updateVisitorsTable();
+                updateStats();
+                alert('تم إلغاء حظر الزوار المحددين بنجاح!');
+            }
+        }
+
+        // البحث في الزوار
+        function searchVisitors() {
+            currentPage = 1;
+            updateVisitorsTable();
+        }
+
+        // تحديث قائمة الزوار
+        function refreshVisitorsList() {
+            updateVisitorsTable();
+            updateStats();
+            alert('تم تحديث قائمة الزوار!');
+        }
+
+        // إرسال رسالة جماعية
+        function sendBulkMessage() {
+            const message = prompt('أدخل الرسالة الجماعية:');
+            if (message) {
+                dataManager.addMessage({
+                    type: 'broadcast',
+                    sender: 'الأدمين',
+                    content: message,
+                    target: 'all'
+                });
+                alert('تم إرسال الرسالة الجماعية!');
+            }
+        }
+
+        // تصدير بيانات الزوار
+        function exportVisitorData() {
+            const data = {
+                visitors: filteredVisitors,
+                exportDate: new Date().toISOString(),
+                totalCount: filteredVisitors.length
+            };
+            
+            const dataStr = JSON.stringify(data, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `visitors-data-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            alert('تم تصدير بيانات الزوار بنجاح!');
+        }
+
+        // مسح المستخدمين المحظورين
+        function clearBannedUsers() {
+            if (confirm('هل تريد حذف جميع المستخدمين المحظورين نهائياً؟')) {
+                const data = dataManager.getData();
+                
+                // حذف المستخدمين المحظورين
+                Object.keys(data.users).forEach(username => {
+                    if (data.users[username].status === 'banned') {
+                        delete data.users[username];
+                    }
+                });
+                
+                // حذف الزوار المحظورين
+                data.visitors = data.visitors.filter(visitor => visitor.status !== 'banned');
+                
+                dataManager.updateData(data);
+                updateVisitorsTable();
+                updateStats();
+                alert('تم حذف جميع المستخدمين المحظورين!');
+            }
+        }
+
+        // إضافة مستمعين للأحداث
+        document.getElementById('searchInput').addEventListener('input', searchVisitors);
+        document.getElementById('statusFilter').addEventListener('change', searchVisitors);
+
+        // إغلاق النافذة المنبثقة عند النقر خارجها
+        document.getElementById('visitorDetailsModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeVisitorDetails();
+            }
+        });
+
+        // تهيئة الصفحة
+        document.addEventListener('DOMContentLoaded', function() {
+            updateStats();
+            updateVisitorsTable();
+        });
+
+        // الاستماع للتغييرات في البيانات
+        dataManager.addListener((type, data) => {
+            updateStats();
+            updateVisitorsTable();
+        });
+    </script>
+</body>
+</html>
