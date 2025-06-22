@@ -110,6 +110,190 @@
             opacity: 0.9;
         }
 
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 0;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            animation: modalSlideIn 0.3s ease-out;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+        }
+
+        .modal-header h2 {
+            margin-bottom: 5px;
+            font-size: 1.5em;
+        }
+
+        .modal-header p {
+            opacity: 0.9;
+            font-size: 0.9em;
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .close:hover {
+            opacity: 0.7;
+            transform: scale(1.1);
+        }
+
+        .modal-body {
+            padding: 30px;
+            direction: rtl;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #dc2626;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+        }
+
+        .login-btn {
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(220, 38, 38, 0.3);
+        }
+
+        .login-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .error-message {
+            background: #fee2e2;
+            color: #dc2626;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #fecaca;
+            font-size: 14px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .admin-accounts {
+            background: #f0f9ff;
+            border: 1px solid #0ea5e9;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        .admin-accounts h4 {
+            color: #0369a1;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .account-item {
+            background: white;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            border: 1px solid #e0f2fe;
+        }
+
+        .account-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .account-item strong {
+            color: #0369a1;
+        }
+
+        .account-item code {
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #374151;
+        }
+
         .features-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -221,6 +405,15 @@
             .access-buttons {
                 grid-template-columns: 1fr;
             }
+
+            .modal-content {
+                margin: 10% auto;
+                width: 95%;
+            }
+
+            .modal-body {
+                padding: 20px;
+            }
         }
     </style>
 </head>
@@ -236,17 +429,65 @@
             <p style="color: #666; margin-bottom: 30px;">يرجى اختيار نوع الحساب المناسب للوصول إلى النظام</p>
             
             <div class="access-buttons">
-                <a href="admin_dashboard_panel.html" class="access-btn admin">
+                <button class="access-btn admin" onclick="openAdminLogin()">
                     <span class="btn-icon">🛡️</span>
                     <div class="btn-title">لوحة تحكم الأدمين</div>
                     <div class="btn-description">إدارة شاملة للنظام والمستخدمين</div>
-                </a>
+                </button>
                 
                 <a href="test_team_visitor_dashboard.html" class="access-btn visitor">
                     <span class="btn-icon">👥</span>
                     <div class="btn-title">لوحة الأعضاء والزوار</div>
                     <div class="btn-description">تسجيل دخول للأعضاء والزوار</div>
                 </a>
+            </div>
+        </div>
+
+        <!-- Admin Login Modal -->
+        <div id="adminModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="close" onclick="closeAdminLogin()">&times;</span>
+                    <h2>تسجيل دخول الأدمين</h2>
+                    <p>يرجى إدخال بيانات المشرف للدخول</p>
+                </div>
+                <div class="modal-body">
+                    <form class="login-form" onsubmit="attemptLogin(event)">
+                        <div class="form-group">
+                            <label for="username">اسم المستخدم:</label>
+                            <input type="text" id="username" name="username" required placeholder="أدخل اسم المستخدم">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="password">كلمة المرور:</label>
+                            <input type="password" id="password" name="password" required placeholder="أدخل كلمة المرور">
+                        </div>
+                        
+                        <button type="submit" class="login-btn" id="loginBtn">
+                            🔐 تسجيل الدخول
+                        </button>
+                        
+                        <div class="error-message" id="errorMessage">
+                            اسم المستخدم أو كلمة المرور غير صحيحة!
+                        </div>
+                    </form>
+
+                    <div class="admin-accounts">
+                        <h4>🔑 حسابات الأدمن المتاحة (للاختبار):</h4>
+                        <div class="account-item">
+                            <strong>المدير العام:</strong> <code>admin</code> / <code>admin123</code>
+                        </div>
+                        <div class="account-item">
+                            <strong>مدير التقنية:</strong> <code>tech_admin</code> / <code>tech2024</code>
+                        </div>
+                        <div class="account-item">
+                            <strong>مدير المحتوى:</strong> <code>content_admin</code> / <code>content123</code>
+                        </div>
+                        <div class="account-item">
+                            <strong>مشرف الأمان:</strong> <code>security_admin</code> / <code>secure2024</code>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -311,6 +552,82 @@
     </div>
 
     <script>
+        // حسابات الأدمن المختلفة
+        const adminAccounts = {
+            'admin': 'admin123',
+            'tech_admin': 'tech2024',
+            'content_admin': 'content123',
+            'security_admin': 'secure2024'
+        };
+
+        // فتح نافذة تسجيل دخول الأدمن
+        function openAdminLogin() {
+            document.getElementById('adminModal').style.display = 'block';
+            document.getElementById('username').focus();
+        }
+
+        // إغلاق نافذة تسجيل دخول الأدمن
+        function closeAdminLogin() {
+            document.getElementById('adminModal').style.display = 'none';
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('errorMessage').style.display = 'none';
+        }
+
+        // محاولة تسجيل الدخول
+        function attemptLogin(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
+            const loginBtn = document.getElementById('loginBtn');
+            
+            // تعطيل الزر أثناء المعالجة
+            loginBtn.disabled = true;
+            loginBtn.textContent = '🔄 جاري التحقق...';
+            
+            // محاكاة تأخير التحقق
+            setTimeout(() => {
+                if (adminAccounts[username] && adminAccounts[username] === password) {
+                    // نجح تسجيل الدخول
+                    loginBtn.textContent = '✅ تم التحقق بنجاح!';
+                    loginBtn.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+                    
+                    setTimeout(() => {
+                        // إعادة توجيه إلى لوحة تحكم الأدمن
+                        window.location.href = 'admin_dashboard_panel.html';
+                    }, 1000);
+                    
+                } else {
+                    // فشل تسجيل الدخول
+                    errorMessage.style.display = 'block';
+                    loginBtn.disabled = false;
+                    loginBtn.textContent = '🔐 تسجيل الدخول';
+                    
+                    // إخفاء رسالة الخطأ بعد 3 ثوان
+                    setTimeout(() => {
+                        errorMessage.style.display = 'none';
+                    }, 3000);
+                }
+            }, 1500);
+        }
+
+        // إغلاق النافذة عند النقر خارجها
+        window.onclick = function(event) {
+            const modal = document.getElementById('adminModal');
+            if (event.target === modal) {
+                closeAdminLogin();
+            }
+        }
+
+        // إغلاق النافذة بزر Escape
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeAdminLogin();
+            }
+        });
+
         // تحديث الإحصائيات بشكل دوري
         function updateSystemStats() {
             const uptime = document.getElementById('systemUptime');
@@ -360,6 +677,41 @@
             
             card.addEventListener('mouseleave', function() {
                 this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // تأثير النقر على حسابات الأدمن (لملء النموذج تلقائياً)
+        document.querySelectorAll('.account-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const text = this.textContent;
+                const codes = text.match(/`([^`]+)`/g);
+                if (codes && codes.length >= 2) {
+                    const username = codes[0].replace(/`/g, '');
+                    const password = codes[1].replace(/`/g, '');
+                    
+                    document.getElementById('username').value = username;
+                    document.getElementById('password').value = password;
+                    
+                    // تأثير بصري
+                    this.style.background = '#e0f2fe';
+                    setTimeout(() => {
+                        this.style.background = 'white';
+                    }, 300);
+                }
+            });
+            
+            // إضافة مؤشر اليد للإشارة إلى إمكانية النقر
+            item.style.cursor = 'pointer';
+            
+            // تأثير hover
+            item.addEventListener('mouseenter', function() {
+                this.style.background = '#f0f9ff';
+                this.style.transform = 'scale(1.02)';
+            });
+            
+            item.addEventListener('mouseleave', function() {
+                this.style.background = 'white';
+                this.style.transform = 'scale(1)';
             });
         });
     </script>
