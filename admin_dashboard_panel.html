@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تحكم الأدمين - TEST Team 15x3</title>
+    <script src="shared-data.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1e3a8a 0%, #7c2d12 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        h1 {
+            color: white;
+            font-size: 2.8em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+        }
+
+        .admin-badge {
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 0.9em;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
+        }
+
+        .admin-info {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logout-btn, .back-btn {
+            background: linear-gradient(135deg, #f87171 0%, #dc2626 100%);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin: 0 5px;
+        }
+
+        .back-btn {
+            background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+        }
+
+        .logout-btn:hover, .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(248, 113, 113, 0.4);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .admin-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            border-radius: 18px;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .admin-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .card-icon {
+            font-size: 2em;
+            margin-left: 10px;
+        }
+
+        .card-title {
+            color: #1e3a8a;
+            font-size: 1.4em;
+            font-weight: bold;
+        }
+
+        .visitor-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .stat-box:hover {
+            transform: scale(1.05);
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            display: block;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        .visitor-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .visitor-item {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 12px;
+            border-right: 4px solid #3b82f6;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .visitor-item:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .visitor-status {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #22c55e;
+            box-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+        }
+
+        .visitor-name {
+            font-weight: bold;
+            color: #1e40af;
+            margin-bottom: 5px;
+        }
+
+        .visitor-details {
+            font-size: 0.85em;
+            color: #6b7280;
+        }
+
+        .chat-container {
+            background: #f8fafc;
+            border-radius: 15px;
+            padding: 20px;
+            height: 450px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: white;
+        }
+
+        .chat-message {
+            margin-bottom: 12px;
+            padding: 12px 15px;
+            border-radius: 10px;
+            max-width: 85%;
+            position: relative;
+        }
+
+        .chat-message.visitor {
+            background: linear-gradient(135deg, #ddd6fe 0%, #c4b5fd 100%);
+            color: #5b21b6;
+            margin-right: auto;
+            text-align: right;
+        }
+
+        .chat-message.admin {
+            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+            color: #166534;
+            margin-left: auto;
+            text-align: left;
+        }
+
+        .chat-message.system {
+            background: #f3f4f6;
+            color: #6b7280;
+            text-align: center;
+            font-style: italic;
+            margin: 10px auto;
+            max-width: 100%;
+        }
+
+        .message-time {
+            font-size: 0.7em;
+            opacity: 0.7;
+            margin-top: 5px;
+        }
+
+        .chat-input-area {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 12px 18px;
+            border: 2px solid #e5e7eb;
+            border-radius: 25px;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .chat-input:focus {
+            border-color: #10b981;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
+        }
+
+        .send-btn {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .send-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .action-btn {
+            padding: 12px 15px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .notification-panel {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 2px solid #f59e0b;
+            border-radius: 12px;
+            padding: 15px;
+            margin: 15px 0;
+            display: none;
+        }
+
+        .notification-panel.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .online-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: #22c55e;
+            border-radius: 50%;
+            margin-left: 8px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2.2em;
+            }
+            
+            .chat-container {
+                height: 350px;
+            }
+            
+            .visitor-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="admin-badge">🛡️ لوحة تحكم الأدمين</div>
+            <h1>TEST Team 15x3 Admin Panel</h1>
+            <div class="admin-info">
+                <div>
+                    <span>مرحباً أدمين أحمد</span>
+                    <span class="online-indicator"></span>
+                    <div style="font-size: 0.8em; opacity: 0.8; margin-top: 5px;">
+                        آخر دخول: الآن | المنطقة الزمنية: GMT+3
+                    </div>
+                </div>
+                <div>
+                    <a href="index.html" class="back-btn">العودة للرئيسية</a>
+                    <button class="logout-btn" onclick="logout()">تسجيل خروج</button>
+                </div>
+            </div>
+        </header>
+
+        <div class="notification-panel" id="notificationPanel">
+            <strong>🔔 تنبيه:</strong> <span id="notificationText"></span>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- إحصائيات الزوار -->
+            <div class="admin-card">
+                <div class="card-header">
+                    <span class="card-icon">👥</span>
+                    <h3 class="card-title">إحصائيات الزوار المباشرة</h3>
+                </div>
+                <div class="visitor-stats">
+                    <div class="stat-box">
+                        <span class="stat-number" id="totalVisitors">12</span>
+                        <div class="stat-label">زوار متصلين</div>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-number" id="newVisitors">4</span>
+                        <div class="stat-label">زوار جدد اليوم</div>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-number" id="activeChats">7</span>
+                        <div class="stat-label">محادثات نشطة</div>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-number" id="totalMessages">143</span>
+                        <div class="stat-label">رسائل اليوم</div>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <button class="action-btn btn-info" onclick="refreshStats()">🔄 تحديث الإحصائيات</button>
+                    <button class="action-btn btn-warning" onclick="exportData()">📊 تصدير البيانات</button>
+                </div>
+            </div>
+
+            <!-- قائمة الزوار المتصلين -->
+            <div class="admin-card">
+                <div class="card-header">
+                    <span class="card-icon">🌐</span>
+                    <h3 class="card-title">الزوار المتصلين حالياً</h3>
+                </div>
+                <div class="visitor-list" id="visitorList">
+                    <!-- سيتم ملء هذا القسم ديناميكياً -->
+                </div>
+                <div class="action-buttons">
+                    <button class="action-btn btn-success" onclick="sendBroadcast()">📢 رسالة جماعية</button>
+                    <button class="action-btn btn-danger" onclick="manageUsers()">⚙️ إدارة المستخدمين</button>
+                </div>
+            </div>
+
+            <!-- دردشة الأدمين -->
+            <div class="admin-card">
+                <div class="card-header">
+                    <span class="card-icon">💬</span>
+                    <h3 class="card-title">دردشة مراقبة المحادثات</h3>
+                </div>
+                <div class="chat-container">
+                    <div class="chat-header">
+                        مراقبة المحادثات المباشرة - عدد الرسائل النشطة: <span id="activeMsgCount">7</span>
+                    </div>
+                    <div class="chat-messages" id="adminChatMessages">
+                        <div class="chat-message system">تم بدء مراقبة الدردشة في <span id="currentTime"></span></div>
+                    </div>
+                    <div class="chat-input-area">
+                        <input type="text" class="chat-input" id="adminChatInput" placeholder="رد كأدمين على جميع الزوار..." onkeypress="handleAdminChatKeyPress(event)">
+                        <button class="send-btn" onclick="sendAdminMessage()">إرسال للجميع</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let dataManager = window.sharedDataManager;
+
+        // تحديث الوقت الحالي
+        function updateCurrentTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('ar-SA', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            const timeElement = document.getElementById('currentTime');
+            if (timeElement) {
+                timeElement.textContent = timeString;
+            }
+        }
+
+        // تحديث الإحصائيات من البيانات المشتركة
+        function updateStatsDisplay() {
+            const data = dataManager.getData();
+            const stats = data.stats;
+
+            document.getElementById('totalVisitors').textContent = stats.totalVisitors;
+            document.getElementById('newVisitors').textContent = stats.newVisitors;
+            document.getElementById('activeChats').textContent = stats.activeChats;
+            document.getElementById('totalMessages').textContent = stats.totalMessages;
+        }
+
+        // تحديث قائمة الزوار
+        function updateVisitorsList() {
+            const data = dataManager.getData();
+            const visitorList = document.getElementById('visitorList');
+            
+            visitorList.innerHTML = '';
+            
+            // إضافة المستخدمين المتصلين
+            Object.entries(data.users).forEach(([username, user]) => {
+                if (user.status === 'online' || user.status === 'busy') {
+                    const visitorItem = document.createElement('div');
+                    visitorItem.className = 'visitor-item';
+                    visitorItem.innerHTML = `
+                        <div class="visitor-status"></div>
+                        <div class="visitor-name">${user.fullName}</div>
+                        <div class="visitor-details">المستخدم: ${username} | الحالة: ${user.status} | الدور: ${user.role}</div>
+                    `;
+                    visitorList.appendChild(visitorItem);
+                }
+            });
+
+            // إضافة الزوار
+            data.visitors.forEach(visitor => {
+                const visitorItem = document.createElement('div');
+                visitorItem.className = 'visitor-item';
+                visitorItem.innerHTML = `
+                    <div class="visitor-status"></div>
+                    <div class="visitor-name">${visitor.name}</div>
+                    <div class="visitor-details">زائر | وقت الانضمام: ${new Date(visitor.joinTime).toLocaleTimeString('ar-SA')}</div>
+                `;
+                visitorList.appendChild(visitorItem);
+            });
+        }
+
+        // تحديث الرسائل
+        function updateChatMessages() {
+            const messages = dataManager.getRecentMessages(20);
+            const chatMessages = document.getElementById('adminChatMessages');
+            
+            // الاحتفاظ برسالة النظام الأولى
+            const systemMessage = chatMessages.querySelector('.chat-message.system');
+            chatMessages.innerHTML = '';
+            if (systemMessage) {
+                chatMessages.appendChild(systemMessage);
+            }
+
+            messages.forEach(message => {
+                addAdminChatMessage(message.type, message.content, message.sender, 
+                    new Date(message.timestamp).toLocaleTimeString('ar-SA'));
+            });
+
+            // تحديث عداد الرسائل
+            document.getElementById('activeMsgCount').textContent = messages.length;
+        }
+
+        // إضافة رسالة للدردشة
+        function addAdminChatMessage(type, message, sender = '', time = '') {
+            const chatMessages = document.getElementById('adminChatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chat-message ${type}`;
+            
+            if (!time) {
+                time = new Date().toLocaleTimeString('ar-SA');
+            }
+            
+            if (type === 'admin') {
+                messageDiv.innerHTML = `<strong>${sender}:</strong> ${message}<div class="message-time">${time}</div>`;
+            } else if (type === 'visitor' || type === 'user') {
+                messageDiv.innerHTML = `<strong>${sender}:</strong> ${message}<div class="message-time">${time}</div>`;
+            } else {
+                messageDiv.textContent = message;
+            }
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // إرسال رسالة من الأدمين
+        function sendAdminMessage() {
+            const input = document.getElementById('adminChatInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                dataManager.addMessage({
+                    type: 'admin',
+                    sender: 'أدمين أحمد',
+                    content: message,
+                    target: 'all'
+                });
+                
+                input.value = '';
+                showNotification('تم إرسال الرسالة لجميع الزوار بنجاح!');
+            }
+        }
+
+        // معالجة الضغط على Enter في دردشة الأدمين
+        function handleAdminChatKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendAdminMessage();
+            }
+        }
+
+        // تحديث الإحصائيات
+        function refreshStats() {
+            updateStatsDisplay();
+            updateVisitorsList();
+            updateChatMessages();
+            showNotification('تم تحديث الإحصائيات بنجاح!');
+        }
+
+        // إظهار التنبيهات
+        function showNotification(message) {
+            const panel = document.getElementById('notificationPanel');
+            const text = document.getElementById('notificationText');
+            
+            text.textContent = message;
+            panel.classList.add('show');
+            
+            setTimeout(() => {
+                panel.classList.remove('show');
+            }, 3000);
+        }
+
+        // وظائف الأزرار
+        function exportData() {
+            const data = dataManager.getData();
+            const dataStr = JSON.stringify(data, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'test-team-data.json';
+            link.click();
+            showNotification('تم تصدير البيانات بنجاح!');
+        }
+
+        function sendBroadcast() {
+            const message = prompt('أدخل الرسالة الجماعية:');
+            if (message) {
+                dataManager.addMessage({
+                    type: 'broadcast',
+                    sender: 'النظام',
+                    content: message,
+                    target: 'all'
+                });
+                showNotification('تم إرسال الرسالة الجماعية!');
+            }
+        }
+
+        function manageUsers() {
+            showNotification('فتح نافذة إدارة المستخدمين...');
+        }
+
+        function logout() {
+            if (confirm('هل تريد تسجيل الخروج؟')) {
+                window.location.href = 'index.html';
+            }
+        }
+
+        // الاستماع للتغييرات في البيانات المشتركة
+        dataManager.addListener((type, data) => {
+            switch(type) {
+                case 'messageAdded':
+                    updateChatMessages();
+                    break;
+                case 'statsUpdated':
+                    updateStatsDisplay();
+                    break;
+                case 'visitorAdded':
+                    updateVisitorsList();
+                    break;
+                case 'userStatusUpdated':
+                    updateVisitorsList();
+                    break;
+            }
+        });
+
+        // تهيئة الصفحة
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCurrentTime();
+            updateStatsDisplay();
+            updateVisitorsList();
+            updateChatMessages();
+            
+            // تحديث الوقت كل ثانية
+            setInterval(updateCurrentTime, 1000);
+        });
+    </script>
+</body>
+</html>
